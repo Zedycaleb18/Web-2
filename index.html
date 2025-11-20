@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XEROX DESIGNS - Professional Graphics Design</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -73,7 +75,7 @@
         .logo-placeholder {
             width: 50px;
             height: 50px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            background: whitesmoke;
             border-radius: 8px;
             margin-right: 15px;
             display: flex;
@@ -81,6 +83,8 @@
             justify-content: center;
             color: var(--white);
             font-weight: bold;
+            stroke: #34a853;
+            stroke-width: 10%;
         }
 
         .logo-text {
@@ -96,6 +100,7 @@
         .nav-links {
             display: flex;
             list-style: none;
+            margin-bottom: 0;
         }
 
         .nav-links li {
@@ -161,42 +166,20 @@
         }
 
         /* Hero Section */
-        .hero {
-            padding: 100px 0;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-green) 100%);
-            color: var(--white);
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url("https://i.imgur.com/xXCT8Yz.jpeg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+
+        .hero-content {
             text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 30px;
-            line-height: 1.6;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background-color: var(--white);
-            color: var(--primary-blue);
-            text-decoration: none;
-            border-radius: 30px;
-            font-weight: bold;
-            transition: var(--transition);
-            border: 2px solid transparent;
-        }
-
-        .btn:hover {
-            background-color: transparent;
-            color: var(--white);
-            border-color: var(--white);
         }
 
         /* About Section */
@@ -258,6 +241,7 @@
             justify-content: center;
             color: #888;
             font-size: 1.2rem;
+            overflow: hidden;
         }
 
         body.dark-mode .about-image {
@@ -488,6 +472,7 @@
 
         .footer-links {
             list-style: none;
+            padding-left: 0;
         }
 
         .footer-links li {
@@ -583,6 +568,18 @@
         }
 
         @media (max-width: 768px) {
+            .hero-section {
+                height: 70vh;
+            }
+            
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section p {
+                font-size: 1rem;
+            }
+
             .nav-links {
                 display: none;
                 position: absolute;
@@ -610,13 +607,20 @@
             .mobile-menu {
                 display: block;
             }
+        }
 
-            .hero h1 {
-                font-size: 2.2rem;
+        @media (max-width: 576px) {
+            .hero-section {
+                height: 60vh;
             }
-
-            .hero p {
-                font-size: 1rem;
+            
+            .hero-section h1 {
+                font-size: 1.8rem;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
             }
         }
     </style>
@@ -627,7 +631,7 @@
         <div class="container header-container">
             <div class="logo-container">
                 <div class="logo-placeholder">
-                    <img src"https://i.imgur.com/PF04eaI.png">
+                    <img src="https://i.imgur.com/duu9giX.png" alt="XEROX DESIGNS Logo" style="width: 80%; max-width: 50px; height: auto;">
                 </div>
                 <div class="logo-text">XEROX DESIGNS</div>
             </div>
@@ -640,7 +644,7 @@
                 <li><a href="#contact">Contact</a></li>
             </ul>
             
-            <button class="theme-toggle" id="themeToggle">
+            <button class="theme-toggle" id="themeToggle" type="button" title="Toggle theme">
                 <i class="fas fa-moon"></i>
             </button>
             
@@ -651,11 +655,20 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="hero" id="home">
+    <section class="hero-section" id="home">
         <div class="container">
-            <h1>CREATIVE DESIGN SOLUTIONS</h1>
-            <p>We transform ideas into visually stunning designs that captivate your audience and elevate your brand. Our team of expert designers delivers innovative solutions tailored to your unique needs.</p>
-            <a href="#contact" class="btn">Get Started</a>
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-10 col-12">
+                    <div class="hero-content">
+                        <h1 class="display-4 fw-bold mb-4">XEROX DESIGN SOLUTION</h1>
+                        <p class="lead mb-4">We transform ideas into visually stunning designs that captivate your audience and elevate your brand. Our team of expert designers delivers innovative solutions tailored to your unique needs.</p>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <button class="btn btn-primary btn-lg px-4 me-md-2">Get Started</button>
+                            <button class="btn btn-outline-light btn-lg px-4">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -671,13 +684,13 @@
                     <p>At XEROX DESIGNS, we believe that great design is not just about aesthetics—it's about communication, functionality, and creating meaningful connections between brands and their audiences.</p>
                 </div>
                 <div class="about-image">
-                    <img clas"logo-placeholder" src="https://i.imgur.com/PF04eaI.png">
+                    <img src="https://i.imgur.com/PF04eaI.png" alt="About Us Image" style="width: 90%; height: auto; border-radius: 10px;">
                 </div>
             </div>
         </div>
     </section>
 
-        <!-- Services Section -->
+    <!-- Services Section -->
     <section class="section services" id="services">
         <div class="container">
             <h2 class="section-title">Our Services</h2>
@@ -738,7 +751,9 @@
         <div class="container">
             <h2 class="section-title">Our Portfolio</h2>
             <div class="portfolio-grid">
-                <div class="portfolio-item">Project 1</div>
+                <div class="portfolio-item">
+                    <img src="https://i.imgur.com/OGbzIwm.jpeg" alt="Portfolio Project 1" style="width: 100%; height: 110%; object-fit: contain;">
+                </div>
                 <div class="portfolio-item">Project 2</div>
                 <div class="portfolio-item">Project 3</div>
                 <div class="portfolio-item">Project 4</div>
@@ -760,7 +775,7 @@
                         </div>
                         <div>
                             <h3>Our Location</h3>
-                            <p>123 Design Street, Creative City, CC 10101</p>
+                            <p>Remote online</p>
                         </div>
                     </div>
                     
@@ -770,7 +785,7 @@
                         </div>
                         <div>
                             <h3>Phone Number</h3>
-                            <p>+1 (555) 123-4567</p>
+                            <p>+254 (742) 881-736</p>
                         </div>
                     </div>
                     
@@ -780,7 +795,7 @@
                         </div>
                         <div>
                             <h3>Email Address</h3>
-                            <p>info@xeroxdesigns.com</p>
+                            <p>xeroxdesigns001ke@gmail.com</p>
                         </div>
                     </div>
                     
@@ -832,11 +847,11 @@
                     <h3>XEROX DESIGNS</h3>
                     <p>Transforming ideas into visually stunning designs that captivate your audience and elevate your brand.</p>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-behance"></i></a>
+                        <a href="https://www.facebook.com/share/1DC3mN4gP9/" title="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com/Jungle_Cj" title="Follow us on Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/xeroxdesignske?igsh=MTZneG1sbXZjMGwzeQ==" title="Follow us on Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/in/caleb-okware-784450386?utm_source=share_via&utm_content=profile&utm_medium=member_android" title="Connect with Caleb Okware on LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.behance.net/xeroxdesign1" title="Visit our Behance profile"><i class="fab fa-behance"></i></a>
                     </div>
                 </div>
                 
@@ -885,6 +900,9 @@
         <i class="fas fa-arrow-up"></i>
     </a>
 
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
         // Theme Toggle
         const themeToggle = document.getElementById('themeToggle');
