@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
+  <title>XEROX DESIGNS | Caleb Okware</title>
+
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+
+  <style>
+    /* ══════════════════════════════════════════
+       THEME VARIABLES
+    ══════════════════════════════════════════ */
+    :root {
+      --red: #c8102e;
+      --red-hover: #a00d24;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --transition-theme: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+    }
+
+    /* DARK THEME (default) */
+    [data-theme="dark"] {
+      --bg:        #0a0a0a;
+      --bg2:       #111111;
+      --bg3:       #181818;
+      --bg4:       #1f1f1f;
+      --text:      #f5f0eb;
+      --text-dim:  #b0a89e;
+      --border:    rgba(255,255,255,0.07);
+      --card-bg:   #181818;
+      --nav-bg:    rgba(10,10,10,0.90);
+      --placeholder-bg: #1a1a1a;
+      --shadow:    0 8px 32px rgba(0,0,0,0.45);
+      --stat-color: var(--red);
+    }
+
+    /* LIGHT THEME */
+    [data-theme="light"] {
+      --bg:        #f4f1ed;
+      --bg2:       #ede9e3;
+      --bg3:       #e5e0d9;
+      --bg4:       #ddd8d0;
+      --text:      #1a1410;
+      --text-dim:  #6b5f54;
+      --border:    rgba(0,0,0,0.10);
+      --card-bg:   #ffffff;
+      --nav-bg:    rgba(244,241,237,0.92);
+      --placeholder-bg: #e8e3dc;
+      --shadow:    0 8px 32px rgba(0,0,0,0.10);
+      --stat-color: var(--red);
+    }
+
+    /* ══════════════════════════════════════════
+       RESET & BASE
+    ══════════════════════════════════════════ */
+    *, *::before, *::after {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+      /* Prevent horizontal scroll at root */
+      overflow-x: hidden;
+    }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      /* Lock width — no overflow leak */
+      width: 100%;
+      overflow-x: hidden;
+      transition: var(--transition-theme);
+    }
+
+    /* Noise overlay — clipped to viewport, never wider */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.3;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ══════════════════════════════════════════
+       NAV
+    ══════════════════════════════════════════ */
+    .nav-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 200;
+      background: var(--nav-bg);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      transition: var(--transition-theme);
+    }
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 24px;
+      max-width: 1320px;
+      margin: 0 auto;
+      gap: 16px;
+    }
+    .logo-mark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .logo-icon {
+      width: 38px; height: 38px;
+      background: var(--red);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .logo-text strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      line-height: 1.1;
+    }
+    .logo-text span {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      font-weight: 300;
+      letter-spacing: 0.03em;
+    }
+
+    /* Desktop nav links */
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--red) !important;
+      color: #fff !important;
+      padding: 7px 18px;
+      border-radius: 4px;
+    }
+    .nav-cta:hover { background: var(--red-hover) !important; }
+
+    /* Nav right cluster */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Theme toggle */
+    .theme-toggle {
+      width: 42px; height: 24px;
+      background: var(--bg4);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.3s;
+      flex-shrink: 0;
+    }
+    .theme-toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 16px; height: 16px;
+      background: var(--red);
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+    [data-theme="light"] .theme-toggle::after {
+      transform: translateX(18px);
+    }
+    .theme-toggle-label {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    /* Hamburger menu */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* Mobile drawer */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 67px; left: 0; right: 0;
+      background: var(--nav-bg);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 24px;
+      z-index: 199;
+      flex-direction: column;
+      gap: 4px;
+      transition: var(--transition-theme);
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu .mobile-cta {
+      margin-top: 12px;
+      background: var(--red);
+      color: #fff !important;
+      text-align: center;
+      padding: 14px !important;
+      border-radius: 6px;
+      border-bottom: none !important;
+    }
+
+    /* ══════════════════════════════════════════
+       HERO
+    ══════════════════════════════════════════ */
+    .hero-section {
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden; /* hero bg word won't cause overflow */
+    }
+    .hero {
+      padding: 110px 24px 80px;
+      width: 100%;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 28px; height: 1px;
+      background: var(--red);
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 10vw, 9.5rem);
+      line-height: 0.92;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .hero h1 .accent { color: var(--red); }
+    .hero-sub {
+      font-size: clamp(0.95rem, 1.3vw, 1.2rem);
+      color: var(--text-dim);
+      max-width: 520px;
+      font-weight: 300;
+      margin: 24px 0 36px;
+      line-height: 1.75;
+    }
+    .hero-contacts {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .hero-contact-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      padding: 9px 16px;
+      border-radius: 60px;
+      font-size: 0.82rem;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .hero-contact-pill:hover {
+      border-color: var(--red);
+      background: rgba(200,16,46,0.08);
+    }
+    .pill-icon {
+      width: 26px; height: 26px;
+      background: var(--red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+    /* Decorative word — clipped inside hero, never leaks */
+    .hero-bg-word {
+      position: absolute;
+      right: -10px;
+      bottom: 40px;
+      font-family: var(--font-display);
+      font-size: clamp(5rem, 15vw, 15rem);
+      color: var(--text);
+      opacity: 0.03;
+      letter-spacing: 0.05em;
+      pointer-events: none;
+      user-select: none;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .scroll-cue {
+      margin-top: 56px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .scroll-cue::after {
+      content: '';
+      display: block;
+      width: 40px; height: 1px;
+      background: var(--text-dim);
+    }
+
+    /* ══════════════════════════════════════════
+       SECTION SHARED
+    ══════════════════════════════════════════ */
+    section { padding: 80px 0; transition: var(--transition-theme); }
+    .section-alt { background: var(--bg2); }
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 48px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      font-weight: 500;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 20px; height: 1px;
+      background: var(--red);
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4.5vw, 3.5rem);
+      letter-spacing: 0.04em;
+      line-height: 1;
+      color: var(--text);
+    }
+    .section-desc {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      max-width: 360px;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+    .red-line {
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(to right, var(--red), transparent);
+    }
+
+    /* ══════════════════════════════════════════
+       WORK / PORTFOLIO GRID
+    ══════════════════════════════════════════ */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+    .filter-tab {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 6px 16px;
+      border-radius: 4px;
+      font-family: var(--font-body);
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-tab:hover, .filter-tab.active {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
+    }
+
+    /* Responsive grid — 12 cols on desktop, collapses cleanly */
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+      width: 100%;
+    }
+    .work-card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: transform 0.3s ease, border-color 0.3s, box-shadow 0.3s, var(--transition-theme);
+      min-width: 0; /* prevent grid blowout */
+    }
+    .work-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(200,16,46,0.35);
+      box-shadow: var(--shadow);
+    }
+    .work-card:hover .card-overlay { opacity: 1; }
+    .work-card:hover .card-img-inner { transform: scale(1.04); }
+
+    /* Responsive card spans */
+    .size-wide  { grid-column: span 8; }
+    .size-tall  { grid-column: span 4; }
+    .size-med   { grid-column: span 4; }
+    .size-half  { grid-column: span 6; }
+    .size-full  { grid-column: span 12; }
+
+    /* Image wrapper — aspect ratio approach */
+    .card-img-wrap {
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      background: var(--placeholder-bg);
+    }
+    .card-img-wrap::before {
+      content: ''; display: block; padding-top: 62%;
+    }
+    .card-img-wrap.portrait::before  { padding-top: 130%; }
+    .card-img-wrap.square::before    { padding-top: 100%; }
+    .card-img-wrap.wide::before      { padding-top: 48%; }
+    .card-img-wrap.auto::before      { display: none; }
+
+    .card-img-inner {
+      position: absolute;
+      inset: 0;
+      transition: transform 0.5s ease;
+    }
+    .card-img-inner img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+    .card-img-wrap.auto .card-img-inner { position: relative; inset: auto; }
+    .card-img-wrap.auto .card-img-inner img { height: auto; object-fit: unset; }
+
+    /* Upload placeholder */
+    .upload-placeholder {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 10px;
+      background: var(--placeholder-bg);
+    }
+    .upload-placeholder.hidden { display: none; }
+    .up-icon {
+      width: 50px; height: 50px;
+      background: var(--bg4);
+      border: 1.5px dashed rgba(200,16,46,0.45);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .up-icon svg { width: 20px; height: 20px; stroke: var(--red); fill: none; stroke-width: 1.6; }
+    .up-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(200,16,46,0.6); font-weight: 500; }
+    .up-hint  { font-size: 0.64rem; color: var(--text-dim); opacity: 0.5; }
+
+    /* Hover overlay */
+    .card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(5,5,5,0.88) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      display: flex; align-items: flex-end; padding: 18px;
+    }
+    .card-overlay .tag {
+      font-size: 0.65rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--red);
+      font-weight: 600; margin-bottom: 4px;
+    }
+    .card-overlay h4 { font-size: 1rem; font-weight: 600; color: #fff; }
+
+    .card-info { padding: 18px 20px 20px; }
+    .card-info .tag {
+      font-size: 0.64rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--red);
+      font-weight: 600; margin-bottom: 6px;
+    }
+    .card-info h4 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+    .card-info p  { font-size: 0.8rem; color: var(--text-dim); font-weight: 300; line-height: 1.55; }
+
+    /* ══════════════════════════════════════════
+       ABOUT
+    ══════════════════════════════════════════ */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .about-img-frame {
+      width: 100%; aspect-ratio: 3/4;
+      border-radius: 14px; overflow: hidden;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .about-img-frame img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: top center;
+      display: block;
+    }
+    .about-image-slot { position: relative; }
+    .about-accent-box {
+      position: absolute;
+      bottom: -22px; right: -18px;
+      background: var(--red);
+      padding: 18px 22px;
+      border-radius: 10px;
+      z-index: 2;
+    }
+    .about-accent-box strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 2.2rem; letter-spacing: 0.02em;
+      color: #fff; line-height: 1;
+    }
+    .about-accent-box span {
+      font-size: 0.68rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: rgba(255,255,255,0.75);
+    }
+    .about-content { padding-left: 12px; }
+    .about-content p {
+      color: var(--text-dim); font-size: 0.92rem;
+      font-weight: 300; line-height: 1.8; margin-bottom: 16px;
+    }
+    .about-content p strong { color: var(--text); font-weight: 600; }
+    .about-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; margin-top: 36px; padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+    .stat strong {
+      display: block;
+      font-family: var(--font-display); font-size: 2.6rem;
+      letter-spacing: 0.02em; color: var(--stat-color); line-height: 1;
+    }
+    .stat span {
+      font-size: 0.72rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text-dim);
+    }
+
+    /* ══════════════════════════════════════════
+       SERVICES
+    ══════════════════════════════════════════ */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .service-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 32px 28px;
+      transition: border-color 0.2s, transform 0.25s, var(--transition-theme);
+      position: relative; overflow: hidden;
+    }
+    .service-card::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 3px;
+      background: var(--red);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .service-card:hover { transform: translateY(-3px); border-color: rgba(200,16,46,0.3); }
+    .service-card:hover::after { transform: scaleX(1); }
+    .service-num {
+      font-family: var(--font-display); font-size: 3rem;
+      color: rgba(200,16,46,0.10); letter-spacing: 0.04em;
+      line-height: 1; margin-bottom: 18px;
+    }
+    .service-card h3 { font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+    .service-card p  { color: var(--text-dim); font-size: 0.85rem; line-height: 1.7; font-weight: 300; }
+
+    /* ══════════════════════════════════════════
+       SKILLS
+    ══════════════════════════════════════════ */
+    .skills-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    .skill-chip {
+      border: 1px solid var(--border);
+      padding: 7px 18px; border-radius: 4px;
+      font-size: 0.8rem; letter-spacing: 0.05em;
+      color: var(--text-dim);
+      transition: all 0.2s, var(--transition-theme);
+      cursor: default;
+    }
+    .skill-chip:hover {
+      border-color: var(--red); color: var(--text);
+      background: rgba(200,16,46,0.07);
+    }
+
+    /* ══════════════════════════════════════════
+       CONTACT
+    ══════════════════════════════════════════ */
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px; align-items: start;
+    }
+    .contact-left h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 4.5vw, 4rem);
+      letter-spacing: 0.04em; line-height: 0.95;
+      margin-bottom: 22px; color: var(--text);
+    }
+    .contact-left h2 .red { color: var(--red); }
+    .contact-left > p {
+      color: var(--text-dim); font-size: 0.92rem;
+      font-weight: 300; line-height: 1.8; max-width: 400px;
+    }
+    .contact-links { display: flex; flex-direction: column; gap: 12px; margin-top: 36px; }
+    .contact-link {
+      display: flex; align-items: center; gap: 14px;
+      text-decoration: none; color: var(--text);
+      padding: 14px 18px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: border-color 0.2s, background 0.2s, var(--transition-theme);
+      font-size: 0.88rem;
+    }
+    .contact-link:hover { border-color: var(--red); background: rgba(200,16,46,0.07); }
+    .contact-link-icon {
+      width: 38px; height: 38px;
+      background: rgba(200,16,46,0.14);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .contact-link-text strong { display: block; font-weight: 600; margin-bottom: 1px; }
+    .contact-link-text span   { font-size: 0.75rem; color: var(--text-dim); }
+
+    .contact-social { margin-top: 24px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .social-btn {
+      width: 40px; height: 40px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none; color: var(--text-dim);
+      font-size: 0.78rem; font-weight: 700;
+      transition: all 0.2s, var(--transition-theme);
+    }
+    .social-btn:hover { background: var(--red); border-color: var(--red); color: #fff; }
+
+    /* Contact form */
+    .contact-form-wrap {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 36px 32px;
+      transition: var(--transition-theme);
+    }
+    .contact-form-wrap h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 24px; color: var(--text); }
+    .form-row {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 14px; margin-bottom: 14px;
+    }
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block; font-size: 0.7rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      background: var(--bg4);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 11px 14px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.2s, var(--transition-theme);
+      -webkit-appearance: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { border-color: var(--red); }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .form-group select option { background: var(--bg4); color: var(--text); }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--red);
+      color: #fff;
+      border: none; border-radius: 7px;
+      font-family: var(--font-body);
+      font-size: 0.88rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, opacity 0.2s;
+      margin-top: 6px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-submit:hover:not(:disabled) { background: var(--red-hover); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* Form feedback */
+    .form-msg {
+      margin-top: 14px; padding: 12px 16px;
+      border-radius: 7px; font-size: 0.82rem;
+      display: none;
+    }
+    .form-msg.success {
+      background: rgba(22,163,74,0.12);
+      border: 1px solid rgba(22,163,74,0.3);
+      color: #4ade80; display: block;
+    }
+    .form-msg.error {
+      background: rgba(200,16,46,0.1);
+      border: 1px solid rgba(200,16,46,0.3);
+      color: #f87171; display: block;
+    }
+    [data-theme="light"] .form-msg.success { color: #15803d; }
+    [data-theme="light"] .form-msg.error   { color: #b91c1c; }
+
+    /* EmailJS notice */
+    .emailjs-note {
+      margin-top: 10px;
+      font-size: 0.7rem; color: var(--text-dim);
+      text-align: center; line-height: 1.5;
+    }
+    .emailjs-note a { color: var(--red); text-decoration: none; }
+
+    /* ══════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════ */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      transition: var(--transition-theme);
+    }
+    .footer-inner {
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 16px;
+    }
+    .footer-copy { font-size: 0.78rem; color: var(--text-dim); }
+    .footer-copy strong { color: var(--red); }
+    .footer-copy a { color: var(--red); text-decoration: none; }
+
+    /* ══════════════════════════════════════════
+       ANIMATIONS
+    ══════════════════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.7s ease both; }
+    .hero-eyebrow { animation-delay: 0.1s; }
+    .hero h1      { animation-delay: 0.22s; }
+    .hero-sub     { animation-delay: 0.34s; }
+    .hero-contacts { animation-delay: 0.44s; }
+    .scroll-cue   { animation-delay: 0.54s; }
+
+    /* ══════════════════════════════════════════
+       RESPONSIVE BREAKPOINTS
+    ══════════════════════════════════════════ */
+
+    /* Tablet — ≤ 1024px */
+    @media (max-width: 1024px) {
+      .size-wide { grid-column: span 12; }
+      .size-tall { grid-column: span 6; }
+      .size-med  { grid-column: span 6; }
+      .size-half { grid-column: span 6; }
+      .size-full { grid-column: span 12; }
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .about-content { padding-left: 0; }
+      .about-accent-box { right: -10px; }
+      .contact-wrap { grid-template-columns: 1fr; gap: 48px; }
+    }
+
+    /* Mobile — ≤ 768px */
+    @media (max-width: 768px) {
+      /* Nav */
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .logo-text span { display: none; }
+
+      /* Sections */
+      section { padding: 60px 0; }
+      .container { padding: 0 16px; }
+      .hero { padding: 90px 16px 60px; }
+
+      /* Work grid — all single column */
+      .size-wide, .size-tall, .size-med,
+      .size-half, .size-full { grid-column: span 12; }
+
+      /* About */
+      .about-grid { gap: 40px; }
+      .about-accent-box {
+        bottom: -16px; right: -8px;
+        padding: 14px 16px;
+      }
+      .about-accent-box strong { font-size: 1.8rem; }
+      .about-stats { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+      .stat strong { font-size: 2rem; }
+
+      /* Services */
+      .services-grid { grid-template-columns: 1fr; }
+
+      /* Contact */
+      .form-row { grid-template-columns: 1fr; }
+      .contact-form-wrap { padding: 24px 20px; }
+
+      /* Footer */
+      .footer-inner { flex-direction: column; text-align: center; gap: 10px; }
+
+      /* Hero bg word — hide on very small screens */
+      .hero-bg-word { display: none; }
+
+      /* Pills stack */
+      .hero-contacts { flex-direction: column; align-items: flex-start; }
+      .hero-contact-pill { width: 100%; }
+    }
+
+    /* Small mobile — ≤ 400px */
+    @media (max-width: 400px) {
+      .about-stats { grid-template-columns: 1fr 1fr; }
+      .nav { padding: 12px 16px; }
+      .logo-text strong { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════ NAV ══════════════════════════════ -->
+<div class="nav-wrapper">
+  <nav class="nav">
+    <div class="logo-mark">
+      <div class="logo-icon">XD</div>
+      <div class="logo-text">
+        <strong>XEROX DESIGNS</strong>
+        <span>Caleb Okware · Nairobi, Kenya</span>
+      </div>
+    </div>
+
+    <!-- Desktop links -->
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact" class="nav-cta">Hire Me</a></li>
+    </ul>
+
+    <div class="nav-right">
+      <span class="theme-toggle-label" id="themeLabel">Dark</span>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light/dark theme"></button>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+</div>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#work"     onclick="closeMobile()">Work</a>
+  <a href="#about"    onclick="closeMobile()">About</a>
+  <a href="#services" onclick="closeMobile()">Services</a>
+  <a href="#skills"   onclick="closeMobile()">Skills</a>
+  <a href="#contact"  onclick="closeMobile()" class="mobile-cta">Hire Me</a>
+</div>
+
+<!-- ══════════════════════════════ HERO ══════════════════════════════ -->
+<section class="hero-section">
+  <div class="hero">
+    <p class="hero-eyebrow fade-up">Premier Graphics Design Studio · Est. 2013</p>
+    <h1 class="fade-up">YOUR <span class="accent">NUMBER</span><br>ONE DESIGN<br>COMPANY</h1>
+    <p class="hero-sub fade-up">We transform ideas into visually stunning designs that captivate your audience and elevate your brand. Our team of expert designers delivers innovative solutions tailored to your unique needs.</p>
+    <div class="hero-contacts fade-up">
+      <a href="https://wa.me/254742881736" class="hero-contact-pill" target="_blank" rel="noopener">
+        <span class="pill-icon">💬</span>WhatsApp +254 742 881 736
+      </a>
+      <a href="mailto:xeroxdesigns001ke@gmail.com" class="hero-contact-pill">
+        <span class="pill-icon">✉</span>xeroxdesigns001ke@gmail.com
+      </a>
+    </div>
+    <div class="scroll-cue fade-up">Scroll to explore</div>
+    <div class="hero-bg-word" aria-hidden="true">DESIGN</div>
+  </div>
+</section>
+<div class="red-line"></div>
+
+<!-- ══════════════════════════════ WORK ══════════════════════════════ -->
+<section id="work" class="section-alt">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Featured Work</div>
+        <h2 class="section-title">PORTFOLIO</h2>
+      </div>
+      <p class="section-desc">Brand identities, print, social media, and UI. Replace any placeholder with your actual project image.</p>
+    </div>
+
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="filterWork('all',this)">All</button>
+      <button class="filter-tab" onclick="filterWork('brand',this)">Brand Identity</button>
+      <button class="filter-tab" onclick="filterWork('print',this)">Print</button>
+      <button class="filter-tab" onclick="filterWork('social',this)">Social Media</button>
+      <button class="filter-tab" onclick="filterWork('ui',this)">UI / Web</button>
+    </div>
+
+    <!--
+    ┌──────────────────────────────────────────────────────────┐
+    │  HOW TO ADD YOUR IMAGES                                  │
+    │  Set src="" on any <img> to your file or URL.            │
+    │  The red placeholder auto-hides when image loads.        │
+    │  Aspect classes: (none)=landscape  portrait  square      │
+    │                  wide=panoramic    auto=natural height   │
+    └──────────────────────────────────────────────────────────┘
+    -->
+    <div class="work-grid" id="workGrid">
+
+      <!-- 1 · Wide feature -->
+      <div class="work-card size-wide" data-cat="brand">
+        <div class="card-img-wrap wide">
+          <div class="card-img-inner">
+            <img src="https://i.imgur.com/3PCh282.jpeg" alt="Brand Identity Design"
+              onerror="this.style.display='none'"
+              onload="this.closest('.card-img-wrap').querySelector('.upload-placeholder').classList.add('hidden')">
+          </div>
+          <div class="upload-placeholder">
+            <div class="up-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+            <div class="up-label">Brand Identity Work</div>
+            <div class="up-hint">Set src="" to your image</div>
+          </div>
+          <div class="card-overlay">
+            <div><div class="tag">Brand Identity</div><h4>Logo & Visual Identity</h4></div>
+          </div>
+        </div>
+        <div class="card-info">
+          <div class="tag">Brand Identity</div>
+          <h4>Logo & Brand Identity System</h4>
+          <p>Complete visual identity: logo, colour palette, typography, and brand guidelines.</p>
+        </div>
+      </div>
+
+      <!-- 2 · Tall -->
+      <div class="work-card size-tall" data-cat="social">
+        <div class="card-img-wrap portrait">
+          <div class="card-img-inner">
+            <img src="https://i.imgur.com/37v54AV.jpeg" alt="Social Media Design"
+              onerror="this.style.display='none'"
+              onload="this.closest('.card-img-wrap').querySelector('.upload-placeholder').classList.add('hidden')">
+          </div>
+          <div class="upload-placeholder">
+            <div class="up-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+            <div class="up-label">Social Media Post</div>
+            <div class="up-hint">Portrait format</div>
+          </div>
+          <div class="card-overlay">
+            <div><div class="tag">Social Media</div><h4>Instagram Campaign</h4></div>
+          </div>
+        </div>
+        <div class="card-info">
+          <div class="tag">Social Media Design</div>
+          <h4>Social Media Campaign</h4>
+          <p>Engaging posts, stories & ad creatives for maximum reach.</p>
+        </div>
+      </div>
+
+      <!-- 3 · Med -->
+      <div class="work-card size-med" data-cat="print">
+        <div class="card-img-wrap">
+          <div class="card-img-inner">
+            <img src="https://i.imgur.com/KDvAqWk.jpeg" alt="Print Design"
+              onerror="this.style.display='none'"
+              onload="this.closest('.card-img-wrap').querySelector('.upload-placeholder').classList.add('hidden')">
+          </div>
+          <div class="upload-placeholder">
+            <div class="up-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+            <div class="up-label">Flyer / Print</div>
+            <div class="up-hint">Any image ratio</div>
+          </div>
+          <div class="card-overlay">
+            <div><div class="tag">Print</div><h4>Event Flyer</h4></div>
+          </div>
+        </div>
+        <div class="card-info">
+          <div class="tag">Print Design</div>
+          <h4>Event Flyer & Brochure</h4>
+          <p>Eye-catching print materials — flyers, brochures, business cards, banners.</p>
+        </div>
+      </div>
+
+      <!-- 4 · Med -->
+      <div class="work-card size-med" data-cat="brand">
+        <div class="card-img-wrap">
+          <div class="card-img-inner">
+            <img src="" alt="Logo Design"
+              onerror="this.style.display='none'"
+              onload="this.closest('.card-img-wrap').querySelector('.upload-placeholder').classList.add('hidden')">
+          </div>
+          <div class="upload-placeholder">
+            <div class="up-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+            <div class="up-label">Logo Design</div>
+            <div class="up-hint">Any image ratio</div>
+          </div>
+          <div class="card-overlay">
+            <div><div class="tag">Logo</div><h4>Logo Suite</h4></div>
+          </div>
+        </div>
+        <div class="card-info">
+          <div class="tag">Logo Design</div>
+          <h4>Logo Suite</h4>
+          <p>Primary, secondary, and monogram marks for a complete brand identity.</p>
+        </div>
+      </div>
+
+      <!-- 5 · Half -->
+      <div class="work-card size-half" data-cat="ui">
+        <div class="card-img-wrap wide">
+          <div class="card-img-inner">
+            <img src="https://i.imgur.com/fLCZVY8.jpeg" alt="UI/UX Design"
+              onerror="this.style.display='none'"
+              onload="this.closest('.card-img-wrap').querySelector('.upload-placeholder').classList.add('hidden')">
+          </div>
+          <div class="upload-placeholder">
+            <div class="up-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+            <div class="up-label">UI / Web Design</div>
+            <div class="up-hint">Wide format</div>
+          </div>
+          <div class="card-overlay">
+            <div><div class="tag">UI/UX</div><h4>Website UI Concept</h4></div>
+          </div>
+        </div>
+        <div class="card-info">
+          <div class="tag">UI/UX Design</div>
+          <h4>Website & App UI</h4>
+          <p>Intuitive interfaces that engage users and enhance satisfaction across all devices.</p>
+        </div>
+      </div>
+
+      <!-- 6 · Half -->
+      <div class="work-card size-half" data-cat="social">
+        <div class="card-img-wrap wide">
+          <div class="card-img-inner">
+            <img src="" alt="Motion Graphics"
+              onerror="this.style.display='none'"
+              onload="this.closest('.card-img-wrap').querySelector('.upload-placeholder').classList.add('hidden')">
+          </div>
+          <div class="upload-placeholder">
+            <div class="up-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+            <div class="up-label">Thumbnail / Motion</div>
+            <div class="up-hint">Wide format</div>
+          </div>
+          <div class="card-overlay">
+            <div><div class="tag">Motion</div><h4>YouTube Thumbnails</h4></div>
+          </div>
+        </div>
+        <div class="card-info">
+          <div class="tag">Motion Graphics</div>
+          <h4>YouTube Thumbnails & Lower Thirds</h4>
+          <p>Custom thumbnails and animated lower thirds for content creators.</p>
+        </div>
+      </div>
+
+      <!-- 7 · Full width -->
+      <div class="work-card size-full" data-cat="print">
+        <div class="card-img-wrap wide">
+          <div class="card-img-inner">
+            <img src="" alt="Packaging Design"
+              onerror="this.style.display='none'"
+              onload="this.closest('.card-img-wrap').querySelector('.upload-placeholder').classList.add('hidden')">
+          </div>
+          <div class="upload-placeholder">
+            <div class="up-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+            <div class="up-label">Feature / Showcase Image</div>
+            <div class="up-hint">Full-width — best for wide mockups, posters, packaging</div>
+          </div>
+          <div class="card-overlay">
+            <div><div class="tag">Packaging</div><h4>Brand Collateral System</h4></div>
+          </div>
+        </div>
+        <div class="card-info">
+          <div class="tag">Packaging & Collateral</div>
+          <h4>Full Brand Collateral System</h4>
+          <p>End-to-end brand collateral including packaging, stationery, and marketing materials for a cohesive brand experience at every touchpoint.</p>
+        </div>
+      </div>
+
+    </div><!-- /work-grid -->
+  </div>
+</section>
+
+<!-- ══════════════════════════════ ABOUT ══════════════════════════════ -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-image-slot">
+        <div class="about-img-frame">
+          <!-- Replace src with your portrait photo -->
+          <img src="" alt="https://i.imgur.com/PkXzkg2.jpeg"
+            onerror="this.style.display='none'"
+            onload="this.closest('.about-img-frame').querySelector('.upload-placeholder').classList.add('hidden')">
+          <div class="upload-placeholder">
+            <div class="up-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+            <div class="up-label">Your Profile Photo</div>
+            <div class="up-hint">Portrait · Any size</div>
+          </div>
+        </div>
+        <div class="about-accent-box">
+          <strong>10+</strong>
+          <span>Years of<br>Experience</span>
+        </div>
+      </div>
+
+      <div class="about-content">
+        <div class="section-label">About Us</div>
+        <h2 class="section-title">YOUR VISION,<br>OUR DESIGN</h2>
+        <p><strong>XEROX DESIGNS</strong> is a premier graphics design company with over a decade of experience in creating compelling visual identities for businesses worldwide.</p>
+        <p>Our mission is to transform complex ideas into simple, beautiful, and effective designs. We specialize in branding, digital design, print media, and user experience design.</p>
+        <p>At XEROX DESIGNS, great design isn't just about aesthetics — it's about <strong>communication, functionality, and creating meaningful connections</strong> between brands and their audiences.</p>
+        <div class="about-stats">
+          <div class="stat"><strong>50+</strong><span>Projects Done</span></div>
+          <div class="stat"><strong>24h</strong><span>Turnaround</span></div>
+          <div class="stat"><strong>100%</strong><span>Original Work</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ SERVICES ══════════════════════════════ -->
+<section id="services" class="section-alt">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">What We Do</div>
+        <h2 class="section-title">OUR SERVICES</h2>
+      </div>
+    </div>
+    <div class="services-grid">
+      <div class="service-card"><div class="service-num">01</div><h3>Brand Identity</h3><p>Comprehensive branding solutions including logo design, color schemes, typography, and brand guidelines to establish a strong visual identity.</p></div>
+      <div class="service-card"><div class="service-num">02</div><h3>Web Design</h3><p>Responsive and user-friendly website designs that provide exceptional user experiences and drive conversions across all platforms.</p></div>
+      <div class="service-card"><div class="service-num">03</div><h3>UI/UX Design</h3><p>Intuitive interface designs and user experiences that engage users and enhance satisfaction across all devices.</p></div>
+      <div class="service-card"><div class="service-num">04</div><h3>Print Design</h3><p>High-quality print materials including brochures, business cards, banners, and packaging designs that make a lasting impact.</p></div>
+      <div class="service-card"><div class="service-num">05</div><h3>Social Media Creatives</h3><p>Scroll-stopping social media designs — posts, stories, carousels, and ad creatives built for engagement and brand consistency.</p></div>
+      <div class="service-card"><div class="service-num">06</div><h3>Motion Graphics</h3><p>Custom animated content including YouTube thumbnails, lower thirds, and intro sequences for content creators and businesses.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ SKILLS ══════════════════════════════ -->
+<section id="skills">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Tools & Expertise</div>
+        <h2 class="section-title">SKILLS</h2>
+      </div>
+      <p class="section-desc">3+ years hands-on design experience — self-taught, client-focused, delivering modern conversion-driven visuals.</p>
+    </div>
+    <div class="skills-row">
+      <span class="skill-chip">Adobe Photoshop</span>
+      <span class="skill-chip">Adobe Illustrator</span>
+      <span class="skill-chip">Adobe InDesign</span>
+      <span class="skill-chip">Canva Pro</span>
+      <span class="skill-chip">Figma</span>
+      <span class="skill-chip">After Effects</span>
+      <span class="skill-chip">Brand Identity</span>
+      <span class="skill-chip">Print & Layout</span>
+      <span class="skill-chip">Social Media Design</span>
+      <span class="skill-chip">Thumbnail Design</span>
+      <span class="skill-chip">Packaging Design</span>
+      <span class="skill-chip">Typography</span>
+      <span class="skill-chip">Colour Theory</span>
+      <span class="skill-chip">Visual Storytelling</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ CONTACT ══════════════════════════════ -->
+<section id="contact" class="section-alt">
+  <div class="container">
+    <div class="contact-wrap">
+      <div class="contact-left">
+        <div class="section-label">Get In Touch</div>
+        <h2>LET'S CREATE<br>SOMETHING <span class="red">GREAT</span></h2>
+        <p>Available for freelance projects, remote work, and full-time design roles. Reach out and let's bring your vision to life.</p>
+        <div class="contact-links">
+          <a href="https://wa.me/254742881736" target="_blank" rel="noopener" class="contact-link">
+            <div class="contact-link-icon">💬</div>
+            <div class="contact-link-text"><strong>WhatsApp</strong><span>+254 742 881 736</span></div>
+          </a>
+          <a href="tel:+254742881736" class="contact-link">
+            <div class="contact-link-icon">📞</div>
+            <div class="contact-link-text"><strong>Call / Text</strong><span>+254 742 881 736</span></div>
+          </a>
+          <a href="mailto:xeroxdesigns001ke@gmail.com" class="contact-link">
+            <div class="contact-link-icon">✉</div>
+            <div class="contact-link-text"><strong>Email</strong><span>xeroxdesigns001ke@gmail.com</span></div>
+          </a>
+        </div>
+        <div class="contact-social">
+          <a href="#" class="social-btn" title="Instagram">IG</a>
+          <a href="#" class="social-btn" title="Facebook">FB</a>
+          <a href="#" class="social-btn" title="Twitter/X">𝕏</a>
+          <a href="https://wa.me/254742881736" class="social-btn" title="WhatsApp" target="_blank" rel="noopener">WA</a>
+        </div>
+      </div>
+
+      <!-- ── CONTACT FORM ── -->
+      <div class="contact-form-wrap">
+        <h3>Send a Message</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fname">First Name</label>
+            <input type="text" id="fname" placeholder="John" required>
+          </div>
+          <div class="form-group">
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" placeholder="Doe">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="femail">Your Email</label>
+          <input type="email" id="femail" placeholder="you@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="fphone">Phone / WhatsApp (optional)</label>
+          <input type="tel" id="fphone" placeholder="+254 700 000 000">
+        </div>
+        <div class="form-group">
+          <label for="fservice">Service Needed</label>
+          <select id="fservice">
+            <option value="">Select a service...</option>
+            <option>Brand Identity / Logo Design</option>
+            <option>Web Design</option>
+            <option>UI/UX Design</option>
+            <option>Print Design</option>
+            <option>Social Media Creatives</option>
+            <option>Motion Graphics</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="fmessage">Project Brief</label>
+          <textarea id="fmessage" placeholder="Tell me about your project, timeline, and budget..." required></textarea>
+        </div>
+        <button class="btn-submit" id="sendBtn" onclick="sendEmail()">
+          <span id="btnText">Send Message →</span>
+        </button>
+        <div class="form-msg" id="formMsg"></div>
+
+        <!--
+          ┌──────────────────────────────────────────────────────────┐
+          │  EMAIL SETUP — 3 simple steps (free, 200 emails/month)  │
+          │                                                          │
+          │  1. Sign up free at https://www.emailjs.com             │
+          │  2. Add an Email Service (Gmail works perfectly)        │
+          │  3. Create an Email Template with these variables:      │
+          │       {{from_name}}  {{from_email}}  {{phone}}          │
+          │       {{service}}    {{message}}                        │
+          │  4. Replace the 3 placeholders below with your IDs:     │
+          │       YOUR_PUBLIC_KEY  →  Account > API Keys            │
+          │       YOUR_SERVICE_ID  →  Email Services                │
+          │       YOUR_TEMPLATE_ID →  Email Templates               │
+          └──────────────────────────────────────────────────────────┘
+        -->
+        <p class="emailjs-note">
+          Powered by <a href="https://www.emailjs.com" target="_blank" rel="noopener">EmailJS</a> — messages go straight to <strong>xeroxdesigns001ke@gmail.com</strong>.<br>
+          <span style="opacity:0.6;">See setup instructions in the HTML comments above.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ FOOTER ══════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <p class="footer-copy">© 2026 <strong>XEROX DESIGNS</strong> · Caleb Okware · Nairobi, Kenya. All Rights Reserved.</p>
+      <p class="footer-copy">
+        <a href="mailto:xeroxdesigns001ke@gmail.com">xeroxdesigns001ke@gmail.com</a>
+        &nbsp;·&nbsp; @xeroxdesigns
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════ SCRIPTS ══════════════════════════════ -->
+<script>
+  /* ── EmailJS init ── replace with your actual Public Key ── */
+  (function(){
+    emailjs.init({ publicKey: "YOUR_PUBLIC_KEY" });
+  })();
+
+  /* ── Send email via EmailJS ── */
+  async function sendEmail() {
+    const btn     = document.getElementById('sendBtn');
+    const btnText = document.getElementById('btnText');
+    const msgBox  = document.getElementById('formMsg');
+
+    const fname   = document.getElementById('fname').value.trim();
+    const lname   = document.getElementById('lname').value.trim();
+    const email   = document.getElementById('femail').value.trim();
+    const phone   = document.getElementById('fphone').value.trim();
+    const service = document.getElementById('fservice').value;
+    const message = document.getElementById('fmessage').value.trim();
+
+    if (!fname || !email || !message) {
+      showMsg('error', '⚠ Please fill in your name, email, and message.');
+      return;
+    }
+    const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRx.test(email)) {
+      showMsg('error', '⚠ Please enter a valid email address.');
+      return;
+    }
+
+    btn.disabled = true;
+    btnText.textContent = 'Sending…';
+    msgBox.className = 'form-msg';
+    msgBox.style.display = 'none';
+
+    const templateParams = {
+      from_name:  fname + (lname ? ' ' + lname : ''),
+      from_email: email,
+      phone:      phone || 'Not provided',
+      service:    service || 'Not specified',
+      message:    message
+    };
+
+    try {
+      /* Replace YOUR_SERVICE_ID and YOUR_TEMPLATE_ID below */
+      await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams);
+      showMsg('success', '✅ Message sent! I\'ll get back to you within 24 hours.');
+      /* Clear form */
+      ['fname','lname','femail','fphone','fmessage'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('fservice').value = '';
+    } catch(err) {
+      console.error('EmailJS error:', err);
+      /* Graceful fallback — open mailto so the message is never lost */
+      const subj = encodeURIComponent('Design Enquiry from ' + fname);
+      const body = encodeURIComponent(
+        'Name: ' + templateParams.from_name +
+        '\nEmail: ' + email +
+        '\nPhone: ' + templateParams.phone +
+        '\nService: ' + templateParams.service +
+        '\n\n' + message
+      );
+      window.open('mailto:xeroxdesigns001ke@gmail.com?subject=' + subj + '&body=' + body, '_blank');
+      showMsg('error', '⚠ Direct send failed — your email client has opened as a backup. Please check and send from there.');
+    } finally {
+      btn.disabled = false;
+      btnText.textContent = 'Send Message →';
+    }
+  }
+
+  function showMsg(type, text) {
+    const el = document.getElementById('formMsg');
+    el.textContent = text;
+    el.className = 'form-msg ' + type;
+  }
+
+  /* ── Theme toggle ── */
+  const html        = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const themeLabel  = document.getElementById('themeLabel');
+
+  /* Remember preference */
+  const saved = localStorage.getItem('xd-theme');
+  if (saved) { html.setAttribute('data-theme', saved); updateLabel(saved); }
+
+  themeToggle.addEventListener('click', () => {
+    const current = html.getAttribute('data-theme');
+    const next    = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('xd-theme', next);
+    updateLabel(next);
+  });
+  function updateLabel(theme) {
+    themeLabel.textContent = theme === 'dark' ? 'Dark' : 'Light';
+  }
+
+  /* ── Hamburger / mobile menu ── */
+  const hamburger  = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+  });
+  function closeMobile() {
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+  }
+  /* Close menu on outside click */
+  document.addEventListener('click', e => {
+    if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) closeMobile();
+  });
+
+  /* ── Portfolio filter ── */
+  function filterWork(cat, btn) {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.work-card').forEach(card => {
+      card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+    });
+  }
+
+  /* ── Scroll fade-in ── */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity  = '1';
+        e.target.style.transform = 'translateY(0)';
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.07 });
+
+  document.querySelectorAll('.work-card, .service-card, .skill-chip, .about-stats .stat').forEach(el => {
+    el.style.opacity   = '0';
+    el.style.transform = 'translateY(22px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    io.observe(el);
+  });
+</script>
+</body>
+</html>
